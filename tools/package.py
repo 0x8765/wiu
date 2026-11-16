@@ -8,8 +8,9 @@ root = pathlib.Path(__file__).resolve().parent.parent
 dist = root / 'dist'
 dist.mkdir(exist_ok=True)
 shutil.copy2(root / 'target/release/wiu.exe', dist / 'wiu.exe')
-for name in ['README.md', 'LICENSE']:
-    shutil.copy2(root / name, dist / name)
+for documentation in sorted(root.glob('README*.md')):
+    shutil.copy2(documentation, dist / documentation.name)
+shutil.copy2(root / 'LICENSE', dist / 'LICENSE')
 metadata = json.loads(subprocess.check_output(
     ['cargo', 'metadata', '--offline', '--locked', '--format-version', '1'], cwd=root))
 lines = ['# Third-party dependencies\n\nVersions and declared licenses, including build and platform dependencies.\n']

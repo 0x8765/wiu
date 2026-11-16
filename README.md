@@ -1,8 +1,12 @@
 # wiu
 
+**Français** · [English](README.en.md) · [简体中文](README.zh-CN.md) · [Español](README.es.md) · [Русский](README.ru.md)
+
 Visionneuse d’images Windows x64, écrite en Rust. Aucune édition ni modification des photos.
 
 ## Utilisation
+
+Depuis les sources, compilez et générez d’abord le dossier `dist/` en suivant la section [Compilation](#compilation). Les dossiers `target/` et `dist/` sont générés localement et ne sont pas versionnés.
 
 Ouvrir `dist/wiu.exe` : l’application démarre dans une fenêtre maximisée, avec la barre de titre Windows, et un dialogue permet de choisir une ou plusieurs images. Annuler laisse la fenêtre prête à ouvrir une image. Le glisser-déposer est également accepté. F11 active le plein écran ; F11 ou Échap permettent d’en sortir.
 
@@ -54,10 +58,20 @@ cargo build --release --locked
 cargo test --locked
 ```
 
-Les versions sont verrouillées dans `Cargo.lock`. Ici, la compilation utilise les paquets déjà en cache (`--offline`), car crates.io est inaccessible. L’interface utilise eframe/egui ; les dialogues, GIF et codecs optionnels utilisent Windows ; SVG utilise Direct2D en rendu logiciel. Aucun téléchargement n’est effectué à l’exécution.
+Les versions sont verrouillées dans `Cargo.lock`. Vous pouvez ajouter `--offline` aux commandes Cargo si toutes les dépendances sont déjà en cache. L’interface utilise eframe/egui ; les dialogues, GIF et codecs optionnels utilisent Windows ; SVG utilise Direct2D en rendu logiciel. Aucun téléchargement n’est effectué à l’exécution.
 
-Le binaire est produit dans `target/release/wiu.exe`. Exécuter `python tools/package.py` après compilation pour actualiser `dist`, la notice et les licences des dépendances.
+Le binaire est produit dans `target/release/wiu.exe`. Après compilation, générez le dossier de distribution avec Python :
+
+```powershell
+python tools/package.py
+```
+
+Le script copie l’exécutable, les cinq versions de cette documentation, la licence du projet et les licences des dépendances dans `dist/`. Il utilise `cargo metadata --offline` : les dépendances doivent déjà être en cache.
 
 Vérification du décodage sans fenêtre : `wiu.exe --check "image.png" "image.svg"` (code de sortie 0 si tous les fichiers sont lisibles, 1 sinon). Les tests créent leurs échantillons dans `target/fixtures`.
 
 Les modifications au registre sont limitées aux clés `HKCU\Software\Classes\Applications\wiu.exe`, `HKCU\Software\Classes\wiu.Image`, aux verbes `wiu` sous `SystemFileAssociations`, à `HKCU\Software\wiu` et à la valeur `wiu` de `RegisteredApplications`.
+
+## Licence
+
+wiu est distribué sous [licence MIT](LICENSE). Les licences des dépendances sont incluses dans le dossier de distribution généré.
